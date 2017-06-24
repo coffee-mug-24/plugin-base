@@ -1,0 +1,22 @@
+{
+
+  "compilerOptions": {
+    "lib": ["es6", "dom", "es2015.collection", "es2015.promise"],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "target": "es5",
+    "declaration": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": [
+      "core-js",
+      "jquery"
+    ]
+  },
+
+  "files": [
+    "./src/**/*",
+    "./typings/**/*.d.ts"
+  ]
+
+}
