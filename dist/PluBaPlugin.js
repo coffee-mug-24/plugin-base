@@ -1,25 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var PluBaEventBus_1 = require("./PluBaEventBus");
+var Panel_1 = require("./extensions/Panel");
+var PluBaSettings_1 = require("./PluBaSettings");
+var KEY_DISPLAY_ENABLED = PluBaSettings_1.PluBaSettingsKeys.KEY_DISPLAY_ENABLED;
 var PluBaPlugin = (function () {
-    function PluBaPlugin(world, page, componentConstructors) {
+    function PluBaPlugin(world, page, componentConstructors, configuration) {
         this.world = world;
         this.page = page;
         this.componentConstructors = componentConstructors;
+        this.configuration = configuration;
         this._state = null;
         this._pluginComponentCandidates = [];
         this._pluginComponents = [];
+        if (configuration.panelize) {
+            componentConstructors.push(Panel_1.Panel);
+        }
     }
     PluBaPlugin.prototype.setup = function () {
         var _this = this;
         console.log('Plugin :: Setup Start');
         this._construct(this.componentConstructors, this._pluginComponentCandidates);
         this.world.on(PluBaEventBus_1.PluBaEventTypes.PAGE_INITIALIZED, function () {
-            _this.world.settings.getSetting('display.enabled')
-                .then(function (enabled) {
-                if (enabled === undefined || (_this._state !== 'active' && !!enabled)) {
-                    _this.world.emit(PluBaEventBus_1.PluBaEventTypes.PLUGIN_STATUS, { newValue: 'active' });
+            _this.world.settings.booleanSettingOrDefault(KEY_DISPLAY_ENABLED, _this.configuration.enabledByDefault)
+                .then(function (displayEnabled) {
+                if (_this._state === 'active') {
+                    return;
                 }
+                if (!displayEnabled) {
+                    return;
+                }
+                _this.world.emit(PluBaEventBus_1.PluBaEventTypes.PLUGIN_STATUS, { newValue: 'active' });
             });
         });
         this.world.on(PluBaEventBus_1.PluBaEventTypes.PLUGIN_STATUS, function (event) {
@@ -41,17 +52,22 @@ var PluBaPlugin = (function () {
     PluBaPlugin.prototype.initialize = function () {
         var _this = this;
         console.log('Plugin :: Initialize Start');
+        this._pluginComponents = this._pluginComponentCandidates
+            .filter((function (pluginComponent) { return pluginComponent.isApplicable(_this.page); }));
+        this._pluginComponents.forEach(function (pluginComponent) {
+            pluginComponent.beforeInitialize();
+        });
+        this._pluginComponents.forEach(function (pluginComponent) {
+            pluginComponent.initialize();
+        });
+        this._pluginComponents.forEach(function (pluginComponent) {
+            pluginComponent.afterInitialize();
+        });
+        this.page.markInitialized();
         this.world.emit(PluBaEventBus_1.PluBaEventTypes.LOCATION_LOADED, {
             hostHref: this.world.navigator.hostHref(),
             currentUrl: this.world.navigator.currentUrl()
         });
-        this._pluginComponentCandidates.forEach(function (pluginComponent) {
-            if (pluginComponent.isApplicable(_this.page)) {
-                pluginComponent.initialize();
-                _this._pluginComponents.push(pluginComponent);
-            }
-        });
-        this.page.markInitialized();
         this.world.emit(PluBaEventBus_1.PluBaEventTypes.PAGE_INITIALIZED, {
             page: this.page
         });
@@ -76,7 +92,7 @@ var PluBaPlugin = (function () {
             try {
                 var instance = new constructor();
                 try {
-                    instance.setup(_this.world, _this.page);
+                    instance.setup(_this, _this.world, _this.page);
                     target.push(instance);
                 }
                 catch (e) {
@@ -93,3 +109,12 @@ var PluBaPlugin = (function () {
     return PluBaPlugin;
 }());
 exports.PluBaPlugin = PluBaPlugin;
+var PluBaConfiguration = (function () {
+    function PluBaConfiguration() {
+        this.panelize = false;
+        this.label = null;
+        this.enabledByDefault = false;
+    }
+    return PluBaConfiguration;
+}());
+exports.PluBaConfiguration = PluBaConfiguration;

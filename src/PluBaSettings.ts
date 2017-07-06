@@ -1,4 +1,8 @@
-/// <reference path="../typings/browser.d.ts" />
+import StorageArea = browser.storage.StorageArea;
+
+export class PluBaSettingsKeys {
+    static readonly KEY_DISPLAY_ENABLED: string = 'display.enabled';
+}
 
 export interface PluBaSettings {
 
@@ -6,11 +10,32 @@ export interface PluBaSettings {
 
     getSetting(key: string) : Promise<string>;
 
+    booleanSettingOrDefault(key: string, defaultValue: boolean): Promise<boolean>;
+
 }
 
-export class BrowserPluBaSettings implements PluBaSettings {
+export abstract class AbstractPluBaSettings implements PluBaSettings {
 
-    constructor(private _storage: LocalStorageExtension) {
+    abstract setSetting(key: string, value: string) : Promise<void>;
+
+    abstract getSetting(key: string) : Promise<string>;
+
+    booleanSettingOrDefault(key: string, defaultValue: boolean): Promise<boolean> {
+        return this.getSetting(key)
+            .then((enabled: string) => {
+                if (enabled === undefined) {
+                    return defaultValue;
+                }
+                return enabled === 'true';
+            });
+    }
+
+}
+
+export class BrowserPluBaSettings extends AbstractPluBaSettings {
+
+    constructor(private _storage: StorageArea) {
+        super();
     }
 
     setSetting(key: string, value: string): Promise<void> {
@@ -20,14 +45,14 @@ export class BrowserPluBaSettings implements PluBaSettings {
 
     getSetting(key: string): Promise<string> {
         return this._storage.get(key)
-            .then((result) => {
+            .then((result: any) => {
                 return result[key];
             });
     }
 
 }
 
-export class InMemoryPluBaSettings implements PluBaSettings {
+export class InMemoryPluBaSettings extends AbstractPluBaSettings implements PluBaSettings {
 
     _store: {[key: string]: string} = {};
 

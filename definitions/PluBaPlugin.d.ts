@@ -2,13 +2,14 @@ import { PluBaWorld } from "./PluBaWorld";
 import { PluBaPluginComponent, PluBaPluginComponentConstructor } from "./PluBaPluginComponent";
 import { PluBaPage } from "./PluBaPage";
 export declare class PluBaPlugin {
-    private world;
-    private page;
-    private componentConstructors;
+    private readonly world;
+    private readonly page;
+    private readonly componentConstructors;
+    readonly configuration: PluBaConfiguration;
     private _state;
     private _pluginComponentCandidates;
     private _pluginComponents;
-    constructor(world: PluBaWorld, page: PluBaPage, componentConstructors: PluBaPluginComponentConstructor[]);
+    constructor(world: PluBaWorld, page: PluBaPage, componentConstructors: PluBaPluginComponentConstructor[], configuration: PluBaConfiguration);
     setup(): void;
     initialize(): void;
     activate(): void;
@@ -16,4 +17,9 @@ export declare class PluBaPlugin {
     _construct<T extends PluBaPluginComponent>(constructors: {
         new (): T;
     }[], target: Array<T>): void;
+}
+export declare class PluBaConfiguration {
+    panelize?: boolean;
+    label?: string;
+    enabledByDefault?: boolean;
 }

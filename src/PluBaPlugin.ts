@@ -2,6 +2,10 @@ import {PluBaWorld} from "./PluBaWorld";
 import {PluBaEvent, PluBaEventTypes} from "./PluBaEventBus";
 import {PluBaPluginComponent, PluBaPluginComponentConstructor} from "./PluBaPluginComponent";
 import {PluBaPage} from "./PluBaPage";
+import {Panel} from "./extensions/Panel";
+import {PluBaSettingsKeys} from "./PluBaSettings";
+
+const KEY_DISPLAY_ENABLED: string = PluBaSettingsKeys.KEY_DISPLAY_ENABLED;
 
 export class PluBaPlugin {
 
@@ -10,7 +14,10 @@ export class PluBaPlugin {
     private _pluginComponentCandidates: PluBaPluginComponent[] = [];
     private _pluginComponents: PluBaPluginComponent[] = [];
 
-    constructor(private world: PluBaWorld, private page: PluBaPage, private componentConstructors: PluBaPluginComponentConstructor[]) {
+    constructor(private readonly world: PluBaWorld, private readonly page: PluBaPage, private readonly componentConstructors: PluBaPluginComponentConstructor[], public readonly configuration: PluBaConfiguration) {
+        if (configuration.panelize) {
+            componentConstructors.push(Panel);
+        }
     }
 
     setup() {
@@ -19,11 +26,15 @@ export class PluBaPlugin {
         this._construct(this.componentConstructors, this._pluginComponentCandidates);
 
         this.world.on(PluBaEventTypes.PAGE_INITIALIZED, () => {
-            this.world.settings.getSetting('display.enabled')
-                .then((enabled: string) => {
-                    if (enabled === undefined || (this._state !== 'active' && !!enabled)) {
-                        this.world.emit(PluBaEventTypes.PLUGIN_STATUS, {newValue: 'active'});
+            this.world.settings.booleanSettingOrDefault(KEY_DISPLAY_ENABLED, this.configuration.enabledByDefault)
+                .then((displayEnabled: boolean) => {
+                    if (this._state === 'active') {
+                        return;
                     }
+                    if (!displayEnabled) {
+                        return;
+                    }
+                    this.world.emit(PluBaEventTypes.PLUGIN_STATUS, {newValue: 'active'});
                 });
         });
 
@@ -51,19 +62,24 @@ export class PluBaPlugin {
     initialize() {
         console.log('Plugin :: Initialize Start');
 
+        this._pluginComponents = this._pluginComponentCandidates
+            .filter((pluginComponent => pluginComponent.isApplicable(this.page)));
+        this._pluginComponents.forEach((pluginComponent) => {
+            pluginComponent.beforeInitialize();
+        });
+        this._pluginComponents.forEach((pluginComponent) => {
+            pluginComponent.initialize();
+        });
+        this._pluginComponents.forEach((pluginComponent) => {
+            pluginComponent.afterInitialize();
+        });
+
+        this.page.markInitialized();
+
         this.world.emit(PluBaEventTypes.LOCATION_LOADED, {
             hostHref: this.world.navigator.hostHref(),
             currentUrl: this.world.navigator.currentUrl()
         });
-
-        this._pluginComponentCandidates.forEach((pluginComponent: PluBaPluginComponent) => {
-            if (pluginComponent.isApplicable(this.page)) {
-                pluginComponent.initialize();
-                this._pluginComponents.push(pluginComponent)
-            }
-        });
-
-        this.page.markInitialized();
 
         this.world.emit(PluBaEventTypes.PAGE_INITIALIZED, {
             page: this.page
@@ -95,7 +111,7 @@ export class PluBaPlugin {
             try {
                 const instance: T = new constructor();
                 try {
-                    instance.setup(this.world, this.page);
+                    instance.setup(this, this.world, this.page);
                     target.push(instance);
                 } catch (e) {
                     debugger;
@@ -108,4 +124,11 @@ export class PluBaPlugin {
         });
     }
 
+}
+
+export class PluBaConfiguration {
+
+    public panelize?: boolean = false;
+    public label?: string = null;
+    public enabledByDefault?: boolean = false;
 }

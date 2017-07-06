@@ -1,4 +1,3 @@
-/// <reference types="jquery" />
 import { PluBaWorld } from "./PluBaWorld";
 export declare const INITIALIZED_KEY = "tofInitialized";
 export declare class PluBaPage {

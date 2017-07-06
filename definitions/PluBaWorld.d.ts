@@ -1,4 +1,3 @@
-/// <reference types="jquery" />
 import { PluBaEventBus, PluBaEventCallback, PluBaEventEmitter, PluBaEventRegistrar } from "./PluBaEventBus";
 import { PluBaSettings } from "./PluBaSettings";
 import { PluBaNavigator } from "./PluBaNavigator";
