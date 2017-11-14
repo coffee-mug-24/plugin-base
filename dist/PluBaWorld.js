@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var PluBaWorld = (function () {
+var PluBaWorld = /** @class */ (function () {
     function PluBaWorld(eventBus, settings, navigator, $) {
         this.eventBus = eventBus;
         this.settings = settings;

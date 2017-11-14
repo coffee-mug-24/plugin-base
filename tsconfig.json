@@ -8,7 +8,11 @@
     "declaration": true,
     "rootDir": "src",
     "outDir": "dist",
-    "typeRoots": ["@types", "node_modules/web-ext-types"]
+    "typeRoots": ["@types", "node_modules/web-ext-types"],
+    "types": [
+      "jquery",
+      "global"
+    ]
   },
 
   "files": [

@@ -14,7 +14,7 @@ var PluBaPluginComponent_1 = require("../PluBaPluginComponent");
 var PluBaEventBus_1 = require("../PluBaEventBus");
 var PluBaSettings_1 = require("../PluBaSettings");
 var KEY_DISPLAY_ENABLED = PluBaSettings_1.PluBaSettingsKeys.KEY_DISPLAY_ENABLED;
-var Panel = (function (_super) {
+var Panel = /** @class */ (function (_super) {
     __extends(Panel, _super);
     function Panel() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

@@ -4,7 +4,7 @@ var PluBaEventBus_1 = require("./PluBaEventBus");
 var Panel_1 = require("./extensions/Panel");
 var PluBaSettings_1 = require("./PluBaSettings");
 var KEY_DISPLAY_ENABLED = PluBaSettings_1.PluBaSettingsKeys.KEY_DISPLAY_ENABLED;
-var PluBaPlugin = (function () {
+var PluBaPlugin = /** @class */ (function () {
     function PluBaPlugin(world, page, componentConstructors, configuration) {
         this.world = world;
         this.page = page;
@@ -109,7 +109,7 @@ var PluBaPlugin = (function () {
     return PluBaPlugin;
 }());
 exports.PluBaPlugin = PluBaPlugin;
-var PluBaConfiguration = (function () {
+var PluBaConfiguration = /** @class */ (function () {
     function PluBaConfiguration() {
         this.panelize = false;
         this.label = null;

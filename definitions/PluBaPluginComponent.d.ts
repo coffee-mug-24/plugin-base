@@ -1,3 +1,4 @@
+/// <reference types="jquery" />
 import { PluBaWorld } from "./PluBaWorld";
 import { PluBaPage } from "./PluBaPage";
 import { PluBaPlugin } from "./PluBaPlugin";

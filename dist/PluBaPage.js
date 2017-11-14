@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.INITIALIZED_KEY = 'tofInitialized';
-var PluBaPage = (function () {
+var PluBaPage = /** @class */ (function () {
     function PluBaPage(world, bodySelector) {
         this.world = world;
         this.bodySelector = bodySelector;

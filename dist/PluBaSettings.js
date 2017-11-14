@@ -10,14 +10,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var PluBaSettingsKeys = (function () {
+var PluBaSettingsKeys = /** @class */ (function () {
     function PluBaSettingsKeys() {
     }
+    PluBaSettingsKeys.KEY_DISPLAY_ENABLED = 'display.enabled';
     return PluBaSettingsKeys;
 }());
-PluBaSettingsKeys.KEY_DISPLAY_ENABLED = 'display.enabled';
 exports.PluBaSettingsKeys = PluBaSettingsKeys;
-var AbstractPluBaSettings = (function () {
+var AbstractPluBaSettings = /** @class */ (function () {
     function AbstractPluBaSettings() {
     }
     AbstractPluBaSettings.prototype.booleanSettingOrDefault = function (key, defaultValue) {
@@ -32,7 +32,7 @@ var AbstractPluBaSettings = (function () {
     return AbstractPluBaSettings;
 }());
 exports.AbstractPluBaSettings = AbstractPluBaSettings;
-var BrowserPluBaSettings = (function (_super) {
+var BrowserPluBaSettings = /** @class */ (function (_super) {
     __extends(BrowserPluBaSettings, _super);
     function BrowserPluBaSettings(_storage) {
         var _this = _super.call(this) || this;
@@ -53,7 +53,7 @@ var BrowserPluBaSettings = (function (_super) {
     return BrowserPluBaSettings;
 }(AbstractPluBaSettings));
 exports.BrowserPluBaSettings = BrowserPluBaSettings;
-var InMemoryPluBaSettings = (function (_super) {
+var InMemoryPluBaSettings = /** @class */ (function (_super) {
     __extends(InMemoryPluBaSettings, _super);
     function InMemoryPluBaSettings() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

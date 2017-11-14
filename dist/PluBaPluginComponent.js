@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var AbstractPluBaPluginComponent = (function () {
+var AbstractPluBaPluginComponent = /** @class */ (function () {
     function AbstractPluBaPluginComponent() {
         this.active = false;
     }

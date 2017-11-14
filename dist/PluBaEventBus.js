@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var PluBaEventTypes = (function () {
+var PluBaEventTypes = /** @class */ (function () {
     function PluBaEventTypes() {
     }
+    PluBaEventTypes.PLUGIN_STATUS = 'plugin.status';
+    PluBaEventTypes.PAGE_INITIALIZED = 'pageInitialized';
+    PluBaEventTypes.LOCATION_LOADED = 'locationLoaded';
     return PluBaEventTypes;
 }());
-PluBaEventTypes.PLUGIN_STATUS = 'plugin.status';
-PluBaEventTypes.PAGE_INITIALIZED = 'pageInitialized';
-PluBaEventTypes.LOCATION_LOADED = 'locationLoaded';
 exports.PluBaEventTypes = PluBaEventTypes;
-var PluBaEvent = (function () {
+var PluBaEvent = /** @class */ (function () {
     function PluBaEvent(type, details) {
         this.type = type;
         this.details = details;
@@ -17,7 +17,7 @@ var PluBaEvent = (function () {
     return PluBaEvent;
 }());
 exports.PluBaEvent = PluBaEvent;
-var DefaultPluBaEventBus = (function () {
+var DefaultPluBaEventBus = /** @class */ (function () {
     function DefaultPluBaEventBus() {
         this.callbacks = new Map();
     }
