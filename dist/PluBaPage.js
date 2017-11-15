@@ -1,4 +1,5 @@
 "use strict";
+/// <reference types="jquery" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.INITIALIZED_KEY = 'tofInitialized';
 var PluBaPage = /** @class */ (function () {

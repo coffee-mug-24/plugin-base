@@ -1,3 +1,5 @@
+/// <reference types="jquery" />
+
 import {PluBaWorld} from "./PluBaWorld";
 
 export const INITIALIZED_KEY = 'tofInitialized';

@@ -21,12 +21,10 @@ var PluBaNavigator = /** @class */ (function () {
         var url = new URL(this.currentUrl());
         var result = '';
         if (url.protocol) {
-            result += url.protocol + '://';
+            result += url.protocol + '//';
         }
         result += url.host;
-        if (url.port) {
-            result += url.port;
-        }
+        result += '/';
         return result;
     };
     return PluBaNavigator;

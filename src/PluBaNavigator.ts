@@ -25,12 +25,10 @@ export class PluBaNavigator {
         const url = new URL(this.currentUrl());
         let result = '';
         if (url.protocol) {
-            result += url.protocol + '://';
+            result += url.protocol + '//';
         }
         result += url.host;
-        if (url.port) {
-            result += url.port;
-        }
+        result += '/';
         return result;
     }
 
